@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graph
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation='graph.xsd'>
+    xsi:noNamespaceSchemaLocation='graph.example.xsd'>
     <id>g0</id>
     <name>The Graph Name</name>
     <nodes>

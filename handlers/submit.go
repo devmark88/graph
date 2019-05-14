@@ -17,7 +17,7 @@ func AddGraph(c echo.Context, app *config.AppContext) (err error) {
 	if b, err := ioutil.ReadAll(c.Request().Body); err == nil {
 		err := xml.Validate(string(b))
 		if err != nil {
-			return c.JSON(403, err)
+			return c.JSON(http.StatusBadRequest, echo.Map{"message": err})
 		}
 		return c.XML(http.StatusOK, string(b))
 	}

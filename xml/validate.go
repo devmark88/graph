@@ -2,7 +2,6 @@ package xml
 
 import (
 	"fmt"
-	"io/ioutil"
 	"unsafe"
 
 	"github.com/jbussdieker/golibxml"
@@ -10,15 +9,56 @@ import (
 )
 
 const xsdRef = "https://gist.githubusercontent.com/devmark88/2dda3dc85f9ed173be0c8461af77098d/raw/8c2218fdda9832c55be171e6607467a3445024dd/graph.xsd"
+const xsdContent = `<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="graph">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                <xs:element name="nodes">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="node" maxOccurs="unbounded" minOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="nodeId">
+                        <xs:selector xpath="node" />
+                        <xs:field xpath="id" />
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="edges">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="node" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="from" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="to" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="cost" type="xs:float" minOccurs="0" maxOccurs="1"></xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+`
 
 // Validate => validate xml against xsd
 func Validate(xml string) error {
-	xsdContest, err := ioutil.ReadFile("graph.xsd")
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	xsdSchema, err := xsd.ParseSchema(xsdContest)
+	xsdSchema, err := xsd.ParseSchema([]byte(xsdContent))
 	if err != nil {
 		fmt.Println(err)
 		return err
