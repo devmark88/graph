@@ -12,6 +12,8 @@
 *.out
 unireg
 .vscode/
+.idea/
+debug
 
 # Dependency directories (remove the comment below to include it)
 # vendor/

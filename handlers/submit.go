@@ -4,22 +4,25 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/devmark88/unireg/xml"
-
 	"github.com/devmark88/unireg/config"
+	"github.com/devmark88/unireg/xml"
 
 	"github.com/labstack/echo"
 )
 
 // AddGraph => add new graph to database
 func AddGraph(c echo.Context, app *config.AppContext) (err error) {
-	// g := new(request.Graph)
+	x := xml.XML{}
 	if b, err := ioutil.ReadAll(c.Request().Body); err == nil {
-		err := xml.Validate(string(b))
+		x.Body = string(b)
+		err := x.Validate()
+		g, err := x.Parse()
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, echo.Map{"message": err})
 		}
-		return c.XML(http.StatusOK, string(b))
+
+		dbg := app.DB.Create(g)
+		return c.XML(http.StatusOK, dbg)
 	}
-	return err
+	return c.JSON(http.StatusBadRequest, echo.Map{"message": err})
 }
