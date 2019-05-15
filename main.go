@@ -17,7 +17,7 @@ func main() {
 	c := config.InitSpecs()
 	db := models.Init(&c)
 	ac := config.AppContext{Config: c, DB: db}
-
+	db.LogMode(true)
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())

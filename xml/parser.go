@@ -33,7 +33,7 @@ func (x *XML) Parse() (*models.Graph, error) {
 	nodesM := []models.Node{}
 	edgesM := []models.Edge{}
 
-	g := models.Graph{Nodes: nodesM, Edges: edgesM}
+	g := models.Graph{}
 	id, _ := strconv.ParseUint(gID.Text(), 10, 32)
 	g.ID = uint(id)
 	g.Name = gName.Text()
