@@ -30,9 +30,7 @@ func createConnectionString(host string, port int, pwd, username, dbname string)
 	return fmt.Sprintf("host=%s port=%v user=%s dbname=%s password=%s sslmode=disable", host, port, username, dbname, pwd)
 }
 func migrate(db *gorm.DB) {
-	db.AutoMigrate(Graph{}, Node{}, Edge{})
+	db.AutoMigrate(Graph{}, Node{})
 	db.Model(Node{}).AddForeignKey("graph_id", "graphs(id)", "RESTRICT", "RESTRICT")
 	db.Model(Node{}).AddForeignKey("node_id", "nodes(id)", "RESTRICT", "RESTRICT")
-	db.Model(Edge{}).AddForeignKey("from", "nodes(id)", "RESTRICT", "RESTRICT")
-	db.Model(Edge{}).AddForeignKey("to", "nodes(id)", "RESTRICT", "RESTRICT")
 }

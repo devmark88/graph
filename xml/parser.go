@@ -31,7 +31,6 @@ func (x *XML) Parse() (*models.Graph, error) {
 	gName := doc.FindElement("graph/name")
 
 	nodesM := []models.Node{}
-	edgesM := []models.Edge{}
 
 	g := models.Graph{}
 	id, _ := strconv.ParseUint(gID.Text(), 10, 32)
@@ -46,28 +45,27 @@ func (x *XML) Parse() (*models.Graph, error) {
 		nodesM = append(nodesM, node)
 	}
 	for _, e := range edges.ChildElements() {
-		edge := models.Edge{}
-
 		elem := e.FindElement("id")
 		id, _ := strconv.ParseUint(elem.Text(), 10, 32)
-		edge.ID = uint(id)
 
 		elem = e.FindElement("from")
 		id, _ = strconv.ParseUint(elem.Text(), 10, 32)
-		edge.From = uint(id)
-
+		fromIdx := models.Find(uint(id), nodesM)
+		if fromIdx == -1 {
+			return nil, fmt.Errorf("cannot find node by id %v", id)
+		}
 		elem = e.FindElement("to")
 		id, _ = strconv.ParseUint(elem.Text(), 10, 32)
-		edge.To = uint(id)
-
+		toIdx := models.Find(uint(id), nodesM)
+		if toIdx == -1 {
+			return nil, fmt.Errorf("cannot find node by id %v", id)
+		}
 		elem = e.FindElement("cost")
-		fid, _ := strconv.ParseFloat(elem.Text(), 64)
-		edge.Weight = fid
+		cost, _ := strconv.ParseFloat(elem.Text(), 64)
 
-		edgesM = append(edgesM, edge)
+		nodesM[toIdx].NodeID = &nodesM[fromIdx].ID
+		nodesM[toIdx].Cost = cost
 	}
-	g.Edges = edgesM
 	g.Nodes = nodesM
-
 	return &g, nil
 }

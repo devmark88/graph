@@ -5,6 +5,7 @@ type Node struct {
 	ID      uint `gorm:"primary_key;auto_increment:false"`
 	Name    string
 	GraphID uint
+	Cost    float64
 	NodeID  *uint
 	Nodes   []Node
 }
