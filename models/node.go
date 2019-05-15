@@ -1,10 +1,7 @@
 package models
 
-import "github.com/jinzhu/gorm"
-
 // Node : graph node
 type Node struct {
-	gorm.Model
 	ID      uint `gorm:"primary_key;auto_increment:false"`
 	Name    string
 	GraphID uint
