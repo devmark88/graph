@@ -8,6 +8,11 @@ import (
 	"github.com/krolaw/xsd"
 )
 
+// XML => Manage your xml content
+type XML struct {
+	Body string
+}
+
 const xsdRef = "https://gist.githubusercontent.com/devmark88/2dda3dc85f9ed173be0c8461af77098d/raw/8c2218fdda9832c55be171e6607467a3445024dd/graph.xsd"
 const xsdContent = `<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -57,14 +62,14 @@ const xsdContent = `<?xml version="1.0" encoding="UTF-8"?>
 `
 
 // Validate => validate xml against xsd
-func Validate(xml string) error {
+func (x *XML) Validate() error {
 	xsdSchema, err := xsd.ParseSchema([]byte(xsdContent))
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	doc := golibxml.ParseDoc(xml)
+	doc := golibxml.ParseDoc(x.Body)
 	if doc == nil {
 		// TODO capture and display error - help please
 		fmt.Println("Error parsing document")
