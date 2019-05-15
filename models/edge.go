@@ -4,8 +4,9 @@ import "github.com/jinzhu/gorm"
 
 type Edge struct {
 	gorm.Model
+	ID     uint `gorm:"primary_key;auto_increment:false"`
 	Name   string
-	From   Node
-	To     Node
-	Weight int64
+	From   uint
+	To     uint
+	Weight float64
 }
