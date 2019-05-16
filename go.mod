@@ -12,5 +12,7 @@ require (
 	github.com/mattn/echo-livereload v0.0.0-20190209171218-a46420566cdb
 	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/mattn/go-isatty v0.0.7 // indirect
+	github.com/starwander/GoFibonacciHeap v0.0.0-20190508061137-ba2e4f01000a // indirect
+	github.com/starwander/goraph v0.0.0-20190117062148-0fd368c3da06
 	github.com/valyala/fasttemplate v1.0.1 // indirect
 )

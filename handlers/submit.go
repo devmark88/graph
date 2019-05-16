@@ -29,21 +29,6 @@ func AddGraph(c echo.Context, app *config.AppContext) (err error) {
 				return c.JSON(http.StatusBadRequest, result.GetErrors())
 			}
 		}
-
-		// graph := models.Graph{}
-		// graph.ID = g.ID
-		// graph.Name = g.Name
-		// if result := app.DB.Table("graphs").Create(graph); result.Error != nil {
-		// 	return c.JSON(http.StatusBadRequest, result.GetErrors())
-		// }
-		// nodes := g.Nodes
-		// if result := app.DB.Create(nodes); result.Error != nil {
-		// 	return c.JSON(http.StatusBadRequest, result.GetErrors())
-		// }
-		// edges := g.Edges
-		// if result := app.DB.Create(edges); result.Error != nil {
-		// 	return c.JSON(http.StatusBadRequest, result.GetErrors())
-		// }
 		return c.XML(http.StatusOK, "OK")
 	}
 	return c.JSON(http.StatusBadRequest, echo.Map{"message": err})
