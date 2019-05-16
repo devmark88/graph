@@ -20,7 +20,7 @@ func main() {
 	db.LogMode(true)
 	// Middleware
 	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	// e.Use(middleware.Recover())
 	e.Logger.SetLevel(0)
 
 	e.GET("/", func(c echo.Context) error {

@@ -9,7 +9,7 @@ type Specs struct {
 	Debug            bool   `split_words:"true" default:"false"`
 	Port             int    `split_words:"true" default:"9999"`
 	DatabaseHost     string `split_words:"true" default:"127.0.0.1"`
-	DatabaseUsername string `split_words:"true" default:"mark" `
+	DatabaseUsername string `split_words:"true" default:"postgres" `
 	DatabasePort     int    `split_words:"true" default:"5432"`
 	DatabasePassword string `split_words:"true" default:"123456"`
 	DatabaseName     string `split_words:"true" default:"unireg"`
