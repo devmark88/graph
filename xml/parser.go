@@ -36,7 +36,6 @@ func (x *XML) Parse(p *ParseResponse) error {
 	gName := doc.FindElement("graph/name")
 
 	nodesM := []models.Node{}
-	edgesM := []models.Edge{}
 
 	g := models.Graph{}
 	id, _ := strconv.ParseUint(gID.Text(), 10, 32)
@@ -51,11 +50,8 @@ func (x *XML) Parse(p *ParseResponse) error {
 		nodesM = append(nodesM, node)
 	}
 	for _, e := range edges.ChildElements() {
-		edge := models.Edge{}
-
 		elem := e.FindElement("id")
 		id, _ := strconv.ParseUint(elem.Text(), 10, 32)
-		edge.ID = uint(id)
 
 		elem = e.FindElement("from")
 		id, _ = strconv.ParseUint(elem.Text(), 10, 32)
@@ -68,10 +64,10 @@ func (x *XML) Parse(p *ParseResponse) error {
 		edge.ToID = node.ID
 
 		elem = e.FindElement("cost")
-		fid, _ := strconv.ParseFloat(elem.Text(), 64)
-		edge.Weight = fid
+		cost, _ := strconv.ParseFloat(elem.Text(), 64)
 
-		edgesM = append(edgesM, edge)
+		nodesM[toIdx].NodeID = &nodesM[fromIdx].ID
+		nodesM[toIdx].Cost = cost
 	}
 	// g.Edges = edgesM
 	g.Nodes = nodesM
