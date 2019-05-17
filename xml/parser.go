@@ -9,11 +9,16 @@ import (
 	"github.com/beevik/etree"
 )
 
+type ParseResponse struct {
+	Graph models.Graph
+	Edges []models.Edge
+}
+
 // Parse => Parse xml content
-func (x *XML) Parse() (*models.Graph, error) {
+func (x *XML) Parse(p *ParseResponse) error {
 	doc := etree.NewDocument()
 	if err := doc.ReadFromString(x.Body); err != nil {
-		return nil, err
+		return err
 	}
 	graph := doc.SelectElement("graph")
 	ch := graph.ChildElements()
@@ -21,9 +26,9 @@ func (x *XML) Parse() (*models.Graph, error) {
 	fmt.Println(len(ch))
 	if e2 != "nodes" {
 		if e2 == "edges" {
-			return nil, fmt.Errorf("please put 'nodes' element before 'edges' element")
+			return fmt.Errorf("please put 'nodes' element before 'edges' element")
 		}
-		return nil, fmt.Errorf("cannot find node path in proper place. please see the sample xml file")
+		return fmt.Errorf("cannot find node path in proper place. please see the sample xml file")
 	}
 	nodes := doc.FindElement("graph/nodes")
 	edges := doc.FindElement("graph/edges")
@@ -50,22 +55,23 @@ func (x *XML) Parse() (*models.Graph, error) {
 
 		elem = e.FindElement("from")
 		id, _ = strconv.ParseUint(elem.Text(), 10, 32)
-		fromIdx := models.Find(uint(id), nodesM)
-		if fromIdx == -1 {
-			return nil, fmt.Errorf("cannot find node by id %v", id)
-		}
+		node := models.Find(uint(id), nodesM)
+		edge.FromID = node.ID
+
 		elem = e.FindElement("to")
 		id, _ = strconv.ParseUint(elem.Text(), 10, 32)
-		toIdx := models.Find(uint(id), nodesM)
-		if toIdx == -1 {
-			return nil, fmt.Errorf("cannot find node by id %v", id)
-		}
+		node = models.Find(uint(id), nodesM)
+		edge.ToID = node.ID
+
 		elem = e.FindElement("cost")
 		cost, _ := strconv.ParseFloat(elem.Text(), 64)
 
 		nodesM[toIdx].NodeID = &nodesM[fromIdx].ID
 		nodesM[toIdx].Cost = cost
 	}
+	// g.Edges = edgesM
 	g.Nodes = nodesM
-	return &g, nil
+	p.Graph = g
+	p.Edges = edgesM
+	return nil
 }

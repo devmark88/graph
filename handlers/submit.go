@@ -16,27 +16,19 @@ func AddGraph(c echo.Context, app *config.AppContext) (err error) {
 	if b, err := ioutil.ReadAll(c.Request().Body); err == nil {
 		x.Body = string(b)
 		err := x.Validate()
-		g, err := x.Parse()
+		res := new(xml.ParseResponse)
+		err = x.Parse(res)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, echo.Map{"message": err})
 		}
-		if result := app.DB.Create(g); result.Error != nil {
+		if result := app.DB.Create(&res.Graph); result.Error != nil {
 			return c.JSON(http.StatusBadRequest, result.GetErrors())
 		}
-		// graph := models.Graph{}
-		// graph.ID = g.ID
-		// graph.Name = g.Name
-		// if result := app.DB.Table("graphs").Create(graph); result.Error != nil {
-		// 	return c.JSON(http.StatusBadRequest, result.GetErrors())
-		// }
-		// nodes := g.Nodes
-		// if result := app.DB.Create(nodes); result.Error != nil {
-		// 	return c.JSON(http.StatusBadRequest, result.GetErrors())
-		// }
-		// edges := g.Edges
-		// if result := app.DB.Create(edges); result.Error != nil {
-		// 	return c.JSON(http.StatusBadRequest, result.GetErrors())
-		// }
+		for _, e := range res.Edges {
+			if result := app.DB.Create(&e); result.Error != nil {
+				return c.JSON(http.StatusBadRequest, result.GetErrors())
+			}
+		}
 		return c.XML(http.StatusOK, "OK")
 	}
 	return c.JSON(http.StatusBadRequest, echo.Map{"message": err})

@@ -20,7 +20,7 @@ func main() {
 	db.LogMode(true)
 	// Middleware
 	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	// e.Use(middleware.Recover())
 	e.Logger.SetLevel(0)
 
 	e.GET("/", func(c echo.Context) error {
@@ -28,6 +28,9 @@ func main() {
 	})
 	e.POST("/", func(c echo.Context) error {
 		return handlers.AddGraph(c, &ac)
+	})
+	e.GET("/find", func(c echo.Context) error {
+		return handlers.FindPath(c, &ac)
 	})
 
 	p := fmt.Sprintf(":%v", c.Port)
