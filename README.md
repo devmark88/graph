@@ -290,7 +290,7 @@ Do following steps:
 
 simply run `docker-compose up` if you have docker installed on your system
 
-## Want more?
+## Want more
 
 You can download the `Postman Collection` here => https://www.getpostman.com/collections/21b21083d5766e3138f4
 
@@ -299,3 +299,9 @@ You can download the `Postman Collection` here => https://www.getpostman.com/col
 - [ ] Add test
 - [ ] Add `CI/CD`
 - [ ] Add Deployment config for `Kubernetes`
+
+## Tools and Libraries
+
+- https://echo.labstack.com/
+- https://gorm.io/
+- https://github.com/gyuho/goraph
