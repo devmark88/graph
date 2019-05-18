@@ -290,6 +290,10 @@ Do following steps:
 
 simply run `docker-compose up` if you have docker installed on your system
 
+## Want more?
+
+You can download the `Postman Collection` here => https://www.getpostman.com/collections/21b21083d5766e3138f4
+
 ## TODO
 
 - [ ] Add test
