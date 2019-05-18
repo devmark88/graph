@@ -1,1 +1,6 @@
-FROM alpine
+FROM postgres:11.3-alpine
+
+ENV POSTGRES_PASSWORD=123456
+ENV POSTGRES_USER=postgres
+
+EXPOSE 5432
